@@ -65,6 +65,14 @@ kotlin {
         }
     }
 
+    wasm32("wasm32") {
+        binaries {
+            executable {
+                entryPoint = "main"
+            }
+        }
+    }
+
     sourceSets {
         val commonMain by getting
         val commonTest by getting {
@@ -85,6 +93,12 @@ kotlin {
         val jsTest by getting {
             dependencies {
                 implementation(kotlin("test-js"))
+            }
+        }
+        val wasm32Main by getting
+        val wasm32Test by getting {
+            dependencies {
+                implementation(kotlin("test-wasm32"))
             }
         }
     }
