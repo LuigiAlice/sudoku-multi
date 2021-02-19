@@ -7,12 +7,12 @@ fun main(args: Array<String>) {
 
     val sudoku = Sudoku()
     with(sudoku) {
-        initField()
+        initField(DemoFields.testField)
         printField()
         val counter = measureTimedValue {
             solveField()
         }
-        println("${counter.value} Versuche in ${counter.duration.inSeconds}s")
+        println("${counter.value} Züge in ${counter.duration.inSeconds}s")
         printField()
     }
 }

@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" serverName="pi400" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
+      <paths name="pi400">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/IdeaProjects/sudoku-multi" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/IdeaProjects/sudoku-multi" local="$PROJECT_DIR$/src/jvmMain" web="/" />
+            <mapping deploy="/IdeaProjects/sudoku-multi" local="$PROJECT_DIR$/src/jsMain" web="/" />
+            <mapping deploy="/IdeaProjects/sudoku-multi" local="$PROJECT_DIR$/src/commonTest" web="/" />
+            <mapping deploy="/IdeaProjects/sudoku-multi" local="$PROJECT_DIR$/src/jvmTest" web="/" />
+            <mapping deploy="/IdeaProjects/sudoku-multi" local="$PROJECT_DIR$/src/jsTest" web="/" />
+            <mapping deploy="/IdeaProjects/sudoku-multi" local="$PROJECT_DIR$/src/commonMain" web="/" />
+            <mapping deploy="/IdeaProjects/sudoku-multi" local="$PROJECT_DIR$/src/nativeMain" web="/" />
+            <mapping deploy="/IdeaProjects/sudoku-multi" local="$PROJECT_DIR$/src/nativeTest" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="pi@192.168.0.37:22">
         <serverdata>
           <mappings>

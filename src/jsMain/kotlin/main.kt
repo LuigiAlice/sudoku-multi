@@ -4,11 +4,13 @@ import kotlin.time.measureTimedValue
 
 @ExperimentalTime
 fun main() {
+    // run gradle task: jsBrowserDevelopmentRun
+
     println("Sudoku Resolver in JS")
 
     val sudoku = Sudoku()
     with(sudoku) {
-        initField()
+        initField(DemoFields.testField)
 
         document.writeln("<p>")
         printField()
@@ -18,7 +20,7 @@ fun main() {
             solveField()
         }
         document.writeln("<p>")
-        document.writeln("${counter.value} Versuche in ${counter.duration.inSeconds}s")
+        document.writeln("${counter.value} Züge in ${counter.duration.inSeconds}s")
         document.writeln("</p>")
 
         document.writeln("<p>")
