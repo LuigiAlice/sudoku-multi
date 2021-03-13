@@ -37,7 +37,7 @@ class Sudoku {
         return counter
     }
 
-    private fun checkField(row: Int, col: Int): Boolean {
+    private inline fun checkField(row: Int, col: Int): Boolean {
         gameField[row][col].let { field ->
             // fixed numbers can not be changed
             if (!field.fixed) {
@@ -63,7 +63,7 @@ class Sudoku {
         return false
     }
 
-    private fun checkHorizontal(row: Int, col: Int): Boolean {
+    private inline fun checkHorizontal(row: Int, col: Int): Boolean {
         val field = gameField[row][col]
         for (c in 0 until gameFieldSize) {
             if (c != col && gameField[row][c].number == field.number)
@@ -72,7 +72,7 @@ class Sudoku {
         return true // number is the only one
     }
 
-    private fun checkVertical(row: Int, col: Int): Boolean {
+    private inline fun checkVertical(row: Int, col: Int): Boolean {
         val field = gameField[row][col]
         for (r in 0 until gameFieldSize) {
             if (r != row && gameField[r][col].number == field.number)
@@ -81,7 +81,7 @@ class Sudoku {
         return true // number is the only one
     }
 
-    private fun checkBlockField(row: Int, col: Int): Boolean {
+    private inline fun checkBlockField(row: Int, col: Int): Boolean {
         val field = gameField[row][col]
         val blockRowStart: Int = (row / blockFieldSize) * blockFieldSize
         val blockColStart: Int = (col / blockFieldSize) * blockFieldSize
@@ -97,7 +97,6 @@ class Sudoku {
         }
         return true // number is the only one
     }
-
 
     fun initField(field: String) {
         field.lineSequence().filterNot { it.isBlank() }.forEachIndexed { rowNo, row ->
@@ -120,11 +119,11 @@ class Sudoku {
     }
 
     data class Field(var number: Int, val fixed: Boolean = false) {
-        fun clearIfPossible() {
+        inline fun clearIfPossible() {
             if (!fixed) number = 0
         }
 
-        fun incrementIfPossible(): Boolean {
+        inline fun incrementIfPossible(): Boolean {
             if (!fixed) number++
             return !fixed
         }

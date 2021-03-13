@@ -1,4 +1,3 @@
-
 plugins {
     kotlin("multiplatform") version "1.4.21"
     java
@@ -31,6 +30,12 @@ kotlin {
             }
         }
     }
+
+//    targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
+//        binaries.all {
+//            freeCompilerArgs += "-Xallocator=mimalloc"
+//        }
+//    }
 
     val hostOs = System.getProperty("os.name")
     val isMingwX64 = hostOs.startsWith("Windows")
