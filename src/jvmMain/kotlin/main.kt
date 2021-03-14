@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
         val counter = measureTimedValue {
             solveField()
         }
-        println("${counter.value} Züge in ${counter.duration.inSeconds}s")
+        println("${counter.value} moves in ${counter.duration.inSeconds}s")
         printField()
     }
 }

@@ -7,12 +7,23 @@ fun main(args: Array<String>) {
 
     val sudoku = Sudoku()
     with(sudoku) {
-        initField(DemoFields.testField)
+
+        if (args.isEmpty()) {
+            println("Usage: <file of sudoku field>")
+            println("Example field:")
+            println(DemoFields.testField)
+            initField(DemoFields.testField)
+        } else {
+            val field = readAllText(args[0])
+            println(field)
+            initField(field)
+        }
+        println("Parsed field:")
         printField()
         val counter = measureTimedValue {
             solveField()
         }
-        println("${counter.value} Züge in ${counter.duration.inSeconds}s")
+        println("${counter.value} moves in ${counter.duration.inSeconds}s")
         printField()
     }
 }

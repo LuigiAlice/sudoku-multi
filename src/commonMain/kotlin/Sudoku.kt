@@ -111,7 +111,7 @@ class Sudoku {
     fun printField() {
         gameField.forEach { col ->
             col.forEach { field ->
-                print("  " + if (field.number != 0) field.number else " ")
+                print("  " + if (field.number != 0) field.number else ".")
             }
             println()
         }

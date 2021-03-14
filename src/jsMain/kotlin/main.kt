@@ -20,7 +20,7 @@ fun main() {
             solveField()
         }
         document.writeln("<p>")
-        document.writeln("${counter.value} Züge in ${counter.duration.inSeconds}s")
+        document.writeln("${counter.value} moves in ${counter.duration.inSeconds}s")
         document.writeln("</p>")
 
         document.writeln("<p>")
