@@ -1,5 +1,5 @@
 plugins {
-    kotlin("multiplatform") version "1.4.21"
+    kotlin("multiplatform") version "1.4.32"
     java
 }
 
@@ -21,6 +21,7 @@ kotlin {
             useJUnit()
         }
 
+        withJava()  // needed for fat jar!
         val jvmJar by tasks.getting(org.gradle.jvm.tasks.Jar::class) {
             doFirst {
                 manifest {
@@ -38,9 +39,11 @@ kotlin {
 //    }
 
     val hostOs = System.getProperty("os.name")
+    val hostArch = System.getProperty("os.arch")
     val isMingwX64 = hostOs.startsWith("Windows")
     val nativeTarget = when {
         hostOs == "Mac OS X" -> macosX64("native")
+        hostOs == "Linux" && hostArch == "arm" -> linuxArm64("native")
         hostOs == "Linux" -> linuxX64("native")
         isMingwX64 -> mingwX64("native")
         else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
@@ -51,7 +54,7 @@ kotlin {
             }
         }
     }
-    
+
     js(LEGACY) {
         browser {
             binaries.executable()
@@ -100,11 +103,13 @@ kotlin {
                 implementation(kotlin("test-js"))
             }
         }
+        /*
         val wasm32Main by getting
         val wasm32Test by getting {
             dependencies {
                 implementation(kotlin("test-wasm32"))
             }
         }
+         */
     }
 }
