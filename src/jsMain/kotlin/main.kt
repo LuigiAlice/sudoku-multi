@@ -1,4 +1,5 @@
 import kotlinx.browser.document
+import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
@@ -20,7 +21,7 @@ fun main() {
             solveField()
         }
         document.writeln("<p>")
-        document.writeln("${counter.value} moves in ${counter.duration.inSeconds}s")
+        document.writeln("${counter.value} moves in ${counter.duration.toDouble(DurationUnit.SECONDS)}s")
         document.writeln("</p>")
 
         document.writeln("<p>")

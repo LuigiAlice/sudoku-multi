@@ -1,3 +1,4 @@
+import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
@@ -16,7 +17,7 @@ fun main() {
         val counter = measureTimedValue {
             solveField()
         }
-        println("${counter.value} moves in ${counter.duration.inSeconds}s")
+        println("${counter.value} moves in ${counter.duration.toDouble(DurationUnit.SECONDS)}s")
         printField()
     }
 }
