@@ -2,21 +2,84 @@ class Sudoku {
 
     private val blockFieldSize: Int = 3
     private val gameFieldSize: Int = blockFieldSize * blockFieldSize     // quadratic field
-    private val gameField = Array(gameFieldSize) { Array(gameFieldSize) { Field(0) } }
+    private lateinit var gameField:Array<Array<Field>>
 
-    fun solveField(): Int {
-        var row: Int = 0
-        var col: Int = 0
 
+    fun initField(field: String) {
+        gameField = Array(gameFieldSize) { Array(gameFieldSize) { Field(0) } }
+
+        field.lineSequence().filterNot { it.isBlank() }.forEachIndexed { rowNo, row ->
+            row.split("""\s+""".toRegex()).forEachIndexed { colNo, col ->
+                if (col != "." && col != "") {
+                    gameField[rowNo][colNo] = Field(col.toInt(), true)
+                }
+            }
+        }
+    }
+
+    fun printField() {
+        gameField.forEachIndexed { idxr, col ->
+            col.forEachIndexed { idxc, field ->
+                if (field.number != 0) print(field.number) else print(".")
+                print(" ")
+                if (idxc % blockFieldSize == blockFieldSize - 1) print("  ")
+            }
+            println()
+            if (idxr % blockFieldSize == blockFieldSize - 1)  println()
+        }
+    }
+
+    fun generateField(): Int {
+        initField("")
+
+        var counter = 0
+        val fieldNumbers = (0 until gameFieldSize*gameFieldSize).toList().shuffled()
+        var currentFieldNo = 0
+
+        // as long as not half of all fields are filled
+        while (currentFieldNo < gameFieldSize*gameFieldSize / 2) {
+            val fieldNumber = fieldNumbers[currentFieldNo]
+            val row = fieldNumber / gameFieldSize
+            val col = fieldNumber % gameFieldSize
+            var isOk = false
+
+            for (number in (gameField[row][col].number+1)..gameFieldSize) {
+                gameField[row][col].number = number
+                isOk = checkHorizontal(row, col) && checkVertical(row, col) && checkBlockField(row, col)
+                if (isOk) break
+            }
+
+            if (!isOk) {
+                gameField[row][col].number = 0
+                break
+            } else {
+                currentFieldNo++
+            }
+
+            counter++
+        }
+
+        counter += solveGameField(maxTries = 100_000)
+
+        // generate new one if not solvable
+        if (!gameIsSolved()) counter += generateField()
+
+        return counter
+    }
+
+    fun solveGameField(maxTries: Int = Int.MAX_VALUE): Int {
+        var row = 0
+        var col = 0
         var counter = 0
 
         // as long as not all fields are filled
-        while (row < gameField.size && row > -1
+        while (counter < maxTries
+            && row < gameField.size && row > -1
             && col < gameField.size && col > -1
         ) {
             counter++
 
-            if (checkField(row, col)) {
+            if (checkAndIncrementField(row, col)) {
                 // if ok, go to next field
                 col = (col + 1) % gameFieldSize
                 if (col == 0) row++
@@ -37,7 +100,9 @@ class Sudoku {
         return counter
     }
 
-    private inline fun checkField(row: Int, col: Int): Boolean {
+    fun gameIsSolved() = gameField.firstOrNull { it.firstOrNull { it.number == 0 }?.number == 0 } == null
+
+    private inline fun checkAndIncrementField(row: Int, col: Int): Boolean {
         gameField[row][col].let { field ->
             // fixed numbers can not be changed
             if (!field.fixed) {
@@ -98,27 +163,7 @@ class Sudoku {
         return true // number is the only one
     }
 
-    fun initField(field: String) {
-        field.lineSequence().filterNot { it.isBlank() }.forEachIndexed { rowNo, row ->
-            row.split("""\s+""".toRegex()).forEachIndexed { colNo, col ->
-                if (col != "." && col != "") {
-                    gameField[rowNo][colNo] = Field(col.toInt(), true)
-                }
-            }
-        }
-    }
-
-    fun printField() {
-        gameField.forEach { col ->
-            col.forEach { field ->
-                print("  " + if (field.number != 0) field.number else ".")
-            }
-            println()
-        }
-        println()
-    }
-
-    data class Field(var number: Int, val fixed: Boolean = false) {
+    private data class Field(var number: Int, var fixed: Boolean = false) {
         inline fun clearIfPossible() {
             if (!fixed) number = 0
         }

@@ -18,7 +18,7 @@ fun main() {
         document.writeln("</p>")
 
         val counter = measureTimedValue {
-            solveField()
+            solveGameField()
         }
         document.writeln("<p>")
         document.writeln("${counter.value} moves in ${counter.duration.toDouble(DurationUnit.SECONDS)}s")

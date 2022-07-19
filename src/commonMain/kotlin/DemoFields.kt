@@ -1,5 +1,6 @@
 object DemoFields {
 
+    // 94091126 moves in 7.2557182s
     private val field1 = """
         . . .   . . .   . . .
         . . .   . . .   . . .
@@ -14,6 +15,7 @@ object DemoFields {
         . . .   . 2 .   5 . .
 """.trimIndent()
 
+    // 9244 moves in 0.0253529s
     private val field2 = """
         . 8 .   1 . .   . 2 .
         . . .   9 . .   . 5 .
@@ -28,6 +30,7 @@ object DemoFields {
         . . .   . 4 .   . . 1
 """.trimIndent()
 
+    // 505667050 moves in 53.7312412s
     private val field3 = """
         . 8 .   1 . .   . 2 .
         . . .   . . .   . . .

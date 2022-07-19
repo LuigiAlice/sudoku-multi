@@ -15,7 +15,7 @@ fun main() {
         printField()
 
         val counter = measureTimedValue {
-            solveField()
+            solveGameField()
         }
         println("${counter.value} moves in ${counter.duration.toDouble(DurationUnit.SECONDS)}s")
         printField()
