@@ -12,12 +12,12 @@ fun main() {
     with(sudoku) {
         initField(DemoFields.testField)
 
-        printField()
+        print(printField())
 
         val counter = measureTimedValue {
-            solveGameField()
+            solveField()
         }
         println("${counter.value} moves in ${counter.duration.toDouble(DurationUnit.SECONDS)}s")
-        printField()
+        print(printField())
     }
 }

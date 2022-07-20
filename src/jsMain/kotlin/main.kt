@@ -14,18 +14,18 @@ fun main() {
         initField(DemoFields.testField)
 
         document.writeln("<p>")
-        printField()
+        print(printField())
         document.writeln("</p>")
 
         val counter = measureTimedValue {
-            solveGameField()
+            solveField()
         }
         document.writeln("<p>")
         document.writeln("${counter.value} moves in ${counter.duration.toDouble(DurationUnit.SECONDS)}s")
         document.writeln("</p>")
 
         document.writeln("<p>")
-        printField()
+        print(printField())
         document.writeln("</p>")
     }
 }

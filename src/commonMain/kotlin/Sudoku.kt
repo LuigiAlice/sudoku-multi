@@ -1,3 +1,5 @@
+import kotlin.random.Random
+
 class Sudoku {
 
     private val blockFieldSize: Int = 3
@@ -5,7 +7,7 @@ class Sudoku {
     private lateinit var gameField:Array<Array<Field>>
 
 
-    fun initField(field: String) {
+    fun initField(field: String = "") {
         gameField = Array(gameFieldSize) { Array(gameFieldSize) { Field(0) } }
 
         field.lineSequence().filterNot { it.isBlank() }.forEachIndexed { rowNo, row ->
@@ -17,20 +19,20 @@ class Sudoku {
         }
     }
 
-    fun printField() {
-        gameField.forEachIndexed { idxr, col ->
-            col.forEachIndexed { idxc, field ->
-                if (field.number != 0) print(field.number) else print(".")
-                print(" ")
-                if (idxc % blockFieldSize == blockFieldSize - 1) print("  ")
+    fun printField(): String = StringBuilder().apply {
+            gameField.forEachIndexed { idxr, col ->
+                col.forEachIndexed { idxc, field ->
+                    if (field.number != 0) append(field.number) else append(".")
+                    append(" ")
+                    if (idxc % blockFieldSize == blockFieldSize - 1) append("  ")
+                }
+                appendLine()
+                if (idxr % blockFieldSize == blockFieldSize - 1) appendLine()
             }
-            println()
-            if (idxr % blockFieldSize == blockFieldSize - 1)  println()
-        }
-    }
+        }.toString()
 
     fun generateField(): Int {
-        initField("")
+        initField()
 
         var counter = 0
         val fieldNumbers = (0 until gameFieldSize*gameFieldSize).toList().shuffled()
@@ -59,7 +61,7 @@ class Sudoku {
             counter++
         }
 
-        counter += solveGameField(maxTries = 100_000)
+        counter += solveField(maxTries = 100_000)
 
         // generate new one if not solvable
         if (!gameIsSolved()) counter += generateField()
@@ -67,7 +69,7 @@ class Sudoku {
         return counter
     }
 
-    fun solveGameField(maxTries: Int = Int.MAX_VALUE): Int {
+    fun solveField(maxTries: Int = Int.MAX_VALUE): Int {
         var row = 0
         var col = 0
         var counter = 0
@@ -101,6 +103,30 @@ class Sudoku {
     }
 
     fun gameIsSolved() = gameField.firstOrNull { it.firstOrNull { it.number == 0 }?.number == 0 } == null
+
+    fun deleteRandomNumbers(amount:Int) {
+        var i = 0
+        while (i < amount && !isCompletelyEmpty()) {
+            val fieldNumber = Random.nextInt(0, gameFieldSize * gameFieldSize)
+            val row = fieldNumber / gameFieldSize
+            val col = fieldNumber % gameFieldSize
+            with (gameField[row][col]) {
+                if (!isEmpty()) {
+                    clear()
+                    i++
+                }
+            }
+        }
+    }
+
+    private inline fun isCompletelyEmpty(): Boolean {
+        for (row in gameField) {
+            for (field in row) {
+                if (!field.isEmpty()) return false
+            }
+        }
+        return true
+    }
 
     private inline fun checkAndIncrementField(row: Int, col: Int): Boolean {
         gameField[row][col].let { field ->
@@ -164,6 +190,13 @@ class Sudoku {
     }
 
     private data class Field(var number: Int, var fixed: Boolean = false) {
+        inline fun clear() {
+            number = 0
+            fixed = false
+        }
+
+        inline fun isEmpty(): Boolean = number == 0
+
         inline fun clearIfPossible() {
             if (!fixed) number = 0
         }

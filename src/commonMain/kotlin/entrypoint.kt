@@ -1,3 +1,4 @@
+import kotlin.random.Random
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
@@ -14,6 +15,12 @@ fun start(args: Array<String>)  {
                 generateField()
             }
             println("${counter.value} steps in ${counter.duration.toDouble(DurationUnit.SECONDS)}s")
+            print(printField())
+            val n = Random.nextInt(20, 70)
+            println("Deleting $n numbers:")
+            deleteRandomNumbers(n)
+
+            writeAllText("generated_field.txt", printField())
         } else {
             if (args.isEmpty()) {
                 println("Usage: generate | <file of sudoku field to resolve>")
@@ -25,13 +32,13 @@ fun start(args: Array<String>)  {
                 initField(field)
             }
             println("Parsed field:")
-            printField()
+            print(printField())
             val counter = measureTimedValue {
-                solveGameField()
+                solveField()
             }
             println("${counter.value} moves in ${counter.duration.toDouble(DurationUnit.SECONDS)}s")
             if (!gameIsSolved()) println ("No solution found!")
         }
-        printField()
+        print(printField())
     }
 }
