@@ -31,6 +31,7 @@ class Sudoku {
             }
         }.toString()
 
+
     fun generateField(): Int {
         initField()
 
@@ -47,7 +48,7 @@ class Sudoku {
 
             for (number in (gameField[row][col].number+1)..gameFieldSize) {
                 gameField[row][col].number = number
-                isOk = checkHorizontal(row, col) && checkVertical(row, col) && checkBlockField(row, col)
+                isOk = checkAllRules(row, col)
                 if (isOk) break
             }
 
@@ -61,13 +62,55 @@ class Sudoku {
             counter++
         }
 
-        counter += solveField(maxTries = 100_000)
+        counter += solveField(maxTries = 1_000_000)
 
         // generate new one if not solvable
         if (!gameIsSolved()) counter += generateField()
 
         return counter
     }
+
+    /*
+        fun generateField(): Int {
+        initField()
+
+        var counter = 0
+
+
+        for (fieldNumber in 1..gameFieldSize) {
+            // try to place randomly in each block
+            var blockNo = 0
+            while (blockNo < gameFieldSize) {
+                var isOK = false
+                for (position in (0 until gameFieldSize).shuffled()) {
+                    counter++
+                    val row = (blockNo / blockFieldSize) + position / blockFieldSize
+                    val col = ((blockNo % blockFieldSize) * blockFieldSize) + position % blockFieldSize
+                    if (!gameField[row][col].isEmpty())
+                        continue
+                    gameField[row][col].number = fieldNumber
+                    isOK = checkAllRules(row, col)
+                    if (!isOK) {
+                        gameField[row][col].clear()
+                        continue
+                    } else {
+                        break
+                    }
+                }
+                if (!isOK) {
+                    blockNo--
+                }
+                else {
+                    blockNo++
+                }
+            }
+        }
+
+
+        return counter
+    }
+
+     */
 
     fun solveField(maxTries: Int = Int.MAX_VALUE): Int {
         var row = 0
@@ -134,11 +177,7 @@ class Sudoku {
             if (!field.fixed) {
                 while (field.number <= gameFieldSize) {
                     // if number never fits
-                    if (field.number == 0
-                        || !checkHorizontal(row, col)
-                        || !checkVertical(row, col)
-                        || !checkBlockField(row, col)
-                    ) {
+                    if (field.number == 0 || !checkAllRules(row, col)) {
                         // then try another one
                         field.incrementIfPossible()
                     } else {
@@ -153,6 +192,13 @@ class Sudoku {
         }
         return false
     }
+
+    private inline fun checkAllRules(row: Int, col: Int): Boolean =
+            checkBlockField(row, col)
+            && checkSameBlockPosition(row, col)
+            && checkHorizontal(row, col)
+            && checkVertical(row, col)
+            && checkDiagonal(row, col)
 
     private inline fun checkHorizontal(row: Int, col: Int): Boolean {
         val field = gameField[row][col]
@@ -187,6 +233,38 @@ class Sudoku {
             }
         }
         return true // number is the only one
+    }
+
+    private inline fun checkDiagonal(row: Int, col: Int): Boolean {
+        val field = gameField[row][col]
+        if (row == col) { // is on diagonal "\"
+            for (r in 0 until gameFieldSize) {
+                if (r != row && r != col && gameField[r][r].number == field.number) {
+                    return false    // number already exists in diagonal
+                }
+            }
+        }
+        if (gameFieldSize-1-row == col) { // is on diagonal "/"
+            for (r in 0 until gameFieldSize) {
+                if (gameFieldSize-1-r != row && r != col && gameField[gameFieldSize-1-r][r].number == field.number) {
+                    return false    // number already exists in diagonal
+                }
+            }
+        }
+        return true // number is the only one
+    }
+
+    private inline fun checkSameBlockPosition(row: Int, col: Int): Boolean {
+        val field = gameField[row][col]
+        val rdx = row % blockFieldSize
+        val cdx = col % blockFieldSize
+        for (blockNo in 0 until gameFieldSize) {
+            val r0 = ((blockNo / blockFieldSize) * blockFieldSize) + rdx
+            val c0 = ((blockNo % blockFieldSize) * blockFieldSize) + cdx
+            if (r0 != row && c0 != col && gameField[r0][c0].number == field.number)
+                return false
+        }
+        return true
     }
 
     private data class Field(var number: Int, var fixed: Boolean = false) {
