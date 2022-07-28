@@ -21,7 +21,7 @@ kotlin {
             useJUnit()
         }
 
-        withJava()  // needed for fat jar!
+        // withJava()  // needed for fat jar!
         val jvmJar by tasks.getting(org.gradle.jvm.tasks.Jar::class) {
             doFirst {
                 manifest {

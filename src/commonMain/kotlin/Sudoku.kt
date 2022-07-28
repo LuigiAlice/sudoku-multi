@@ -162,7 +162,7 @@ class Sudoku {
         }
     }
 
-    private inline fun isCompletelyEmpty(): Boolean {
+    private fun isCompletelyEmpty(): Boolean {
         for (row in gameField) {
             for (field in row) {
                 if (!field.isEmpty()) return false
@@ -171,7 +171,7 @@ class Sudoku {
         return true
     }
 
-    private inline fun checkAndIncrementField(row: Int, col: Int): Boolean {
+    private fun checkAndIncrementField(row: Int, col: Int): Boolean {
         gameField[row][col].let { field ->
             // fixed numbers can not be changed
             if (!field.fixed) {
@@ -193,14 +193,14 @@ class Sudoku {
         return false
     }
 
-    private inline fun checkAllRules(row: Int, col: Int): Boolean =
+    private fun checkAllRules(row: Int, col: Int): Boolean =
             checkBlockField(row, col)
             && checkSameBlockPosition(row, col)
             && checkHorizontal(row, col)
             && checkVertical(row, col)
             && checkDiagonal(row, col)
 
-    private inline fun checkHorizontal(row: Int, col: Int): Boolean {
+    private fun checkHorizontal(row: Int, col: Int): Boolean {
         val field = gameField[row][col]
         for (c in 0 until gameFieldSize) {
             if (c != col && gameField[row][c].number == field.number)
@@ -209,7 +209,7 @@ class Sudoku {
         return true // number is the only one
     }
 
-    private inline fun checkVertical(row: Int, col: Int): Boolean {
+    private fun checkVertical(row: Int, col: Int): Boolean {
         val field = gameField[row][col]
         for (r in 0 until gameFieldSize) {
             if (r != row && gameField[r][col].number == field.number)
@@ -218,7 +218,7 @@ class Sudoku {
         return true // number is the only one
     }
 
-    private inline fun checkBlockField(row: Int, col: Int): Boolean {
+    private fun checkBlockField(row: Int, col: Int): Boolean {
         val field = gameField[row][col]
         val blockRowStart: Int = (row / blockFieldSize) * blockFieldSize
         val blockColStart: Int = (col / blockFieldSize) * blockFieldSize
@@ -235,7 +235,7 @@ class Sudoku {
         return true // number is the only one
     }
 
-    private inline fun checkDiagonal(row: Int, col: Int): Boolean {
+    private fun checkDiagonal(row: Int, col: Int): Boolean {
         val field = gameField[row][col]
         if (row == col) { // is on diagonal "\"
             for (r in 0 until gameFieldSize) {
@@ -254,7 +254,7 @@ class Sudoku {
         return true // number is the only one
     }
 
-    private inline fun checkSameBlockPosition(row: Int, col: Int): Boolean {
+    private fun checkSameBlockPosition(row: Int, col: Int): Boolean {
         val field = gameField[row][col]
         val rdx = row % blockFieldSize
         val cdx = col % blockFieldSize
@@ -268,18 +268,18 @@ class Sudoku {
     }
 
     private data class Field(var number: Int, var fixed: Boolean = false) {
-        inline fun clear() {
+        fun clear() {
             number = 0
             fixed = false
         }
 
-        inline fun isEmpty(): Boolean = number == 0
+        fun isEmpty(): Boolean = number == 0
 
-        inline fun clearIfPossible() {
+        fun clearIfPossible() {
             if (!fixed) number = 0
         }
 
-        inline fun incrementIfPossible(): Boolean {
+        fun incrementIfPossible(): Boolean {
             if (!fixed) number++
             return !fixed
         }

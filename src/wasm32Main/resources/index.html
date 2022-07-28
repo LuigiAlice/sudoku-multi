@@ -5,15 +5,11 @@
     <title>Console Output</title>
 </head>
 <body>
-<script type="text/javascript" src="sudoku_multi.wasm.js"></script>
-<script>
-    konan.libraries.push({"imported_igotdata":function(msg){ alert("I got the data, updating");}})
-    var filename = "./sudoku_multi.wasm";
-    fetch(filename).then( function(response) {
-        return response.arrayBuffer();
-    }).then(function(arraybuffer) {
-        instantiateAndRun(arraybuffer, [filename]);
-    });
-</script>
+<script wasm="sudoku_multi.wasm" src="sudoku_multi.wasm.js"></script>
+
+Copy this file to your wasm folder.
+Run nodejs with light-server:
+light-server --serve . --open
+
 </body>
 </html>
