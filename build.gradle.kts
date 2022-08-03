@@ -1,5 +1,5 @@
 plugins {
-    kotlin("multiplatform") version "1.7.10"
+    kotlin("multiplatform") version "1.7.20-Beta"
     java
 }
 
@@ -21,7 +21,7 @@ kotlin {
             useJUnit()
         }
 
-        // withJava()  // needed for fat jar!
+        withJava()  // needed for fat jar!
         val jvmJar by tasks.getting(org.gradle.jvm.tasks.Jar::class) {
             doFirst {
                 manifest {
@@ -29,6 +29,7 @@ kotlin {
                 }
                 from(configurations.getByName("runtimeClasspath").map { if (it.isDirectory) it else zipTree(it) })
             }
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
         }
     }
 
@@ -59,15 +60,21 @@ kotlin {
         browser {
             binaries.executable()
             webpackTask {
-                cssSupport.enabled = true
+                cssSupport {
+                    enabled = true
+                }
             }
             runTask {
-                cssSupport.enabled = true
+                cssSupport {
+                    enabled = true
+                }
             }
             testTask {
                 useKarma {
                     useChromeHeadless()
-                    webpackConfig.cssSupport.enabled = true
+                    webpackConfig.cssSupport {
+                        enabled = true
+                    }
                 }
             }
         }
