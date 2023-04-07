@@ -44,5 +44,5 @@ object DemoFields {
         . . .   . 4 .   . . 1
 """.trimIndent()
 
-    val testField = field1
+    val testField = field2
 }

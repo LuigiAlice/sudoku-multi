@@ -1,5 +1,7 @@
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
+
 plugins {
-    kotlin("multiplatform") version "1.7.20-Beta"
+    kotlin("multiplatform") version "1.8.20"
     java
 }
 
@@ -15,7 +17,7 @@ repositories {
 kotlin {
     jvm {
         compilations.all {
-            kotlinOptions.jvmTarget = "11"
+            kotlinOptions.jvmTarget = "17"
         }
         testRuns["test"].executionTask.configure {
             useJUnit()
@@ -56,35 +58,16 @@ kotlin {
         }
     }
 
-    js(LEGACY) {
+    js(IR) {
         browser {
             binaries.executable()
-            webpackTask {
-                cssSupport {
-                    enabled = true
-                }
-            }
-            runTask {
-                cssSupport {
-                    enabled = true
-                }
-            }
-            testTask {
-                useKarma {
-                    useChromeHeadless()
-                    webpackConfig.cssSupport {
-                        enabled = true
-                    }
-                }
-            }
+
         }
     }
 
-    wasm32("wasm32") {
-        binaries {
-            executable {
-                entryPoint = "main"
-            }
+    wasm {
+        binaries.executable()
+        browser {
         }
     }
 
@@ -110,13 +93,9 @@ kotlin {
                 implementation(kotlin("test-js"))
             }
         }
-        /*
-        val wasm32Main by getting
-        val wasm32Test by getting {
-            dependencies {
-                implementation(kotlin("test-wasm32"))
-            }
-        }
-         */
+
+        val wasmMain by getting
+        val wasmTest by getting
+
     }
 }
