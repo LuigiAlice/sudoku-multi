@@ -4,6 +4,7 @@ import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.toKString
 import platform.posix.*
 
+@OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
 actual fun readAllText(filePath: String): String {
     val returnBuffer = StringBuilder()
     val file = fopen(filePath, "r") ?:
@@ -26,6 +27,7 @@ actual fun readAllText(filePath: String): String {
     return returnBuffer.toString()
 }
 
+@OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
 actual fun writeAllText(filePath:String, text:String) {
     val file = fopen(filePath, "w") ?:
     throw IllegalArgumentException("Cannot open output file $filePath")
@@ -38,6 +40,7 @@ actual fun writeAllText(filePath:String, text:String) {
     }
 }
 
+@OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
 fun writeAllLines(filePath:String, lines:List<String>, lineEnding:String="\n") {
     val file = fopen(filePath, "w") ?: throw IllegalArgumentException("Cannot open output file $filePath")
     try {

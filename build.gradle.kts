@@ -1,8 +1,9 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
-    kotlin("multiplatform") version "1.8.20"
+    kotlin("multiplatform") version "1.9.21"
     java
+    kotlin("jvm") version "1.9.21"
 }
 
 group = "me.luigi"
@@ -17,7 +18,7 @@ repositories {
 kotlin {
     jvm {
         compilations.all {
-            kotlinOptions.jvmTarget = "17"
+            kotlinOptions.jvmTarget = "21"
         }
         testRuns["test"].executionTask.configure {
             useJUnit()
@@ -94,8 +95,11 @@ kotlin {
             }
         }
 
-        val wasmMain by getting
-        val wasmTest by getting
+        val wasmJsMain by getting
+        val wasmJsTest by getting
 
     }
+}
+dependencies {
+    implementation(kotlin("stdlib"))
 }
